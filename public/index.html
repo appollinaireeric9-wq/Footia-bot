@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footia-Bot Live</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+    body{background:#0a0a0a;color:white;padding:15px}
+    .box{background:#1a1a1a;padding:15px;border-radius:10px;margin-bottom:15px}
+    h1{color:#00ff88;text-align:center}
+    #messages{height:300px;overflow-y:auto;background:#0f0f0f;padding:10px;border-radius:8px}
+    .msg{background:#2a2a2a;padding:8px;border-radius:5px;margin:8px 0}
+    .ia{border-left:3px solid #00ff88}
+    .user{border-left:3px solid #0088ff}
+    .input-area{display:flex;gap:10px;margin-top:10px}
+    input{flex:1;padding:12px;border:none;border-radius:8px;background:#2a2a2a;color:white}
+    button{padding:12px 20px;background:#00ff88;color:black;border:none;border-radius:8px;font-weight:bold}
+  </style>
+</head>
+<body>
+  <div class="box"><h1>⚽ FOOTIA-BOT LIVE</h1><p style="text-align:center">L'IA qui commente tes matchs</p></div>
+  
+  <div class="box">
+    <h3>🔴 LIVE: Match en cours</h3>
+    <p><b>Score:</b> 1 - 0 | <b>45e Minute</b></p>
+  </div>
+
+  <div class="box">
+    <h3>💬 Chat + Coach IA</h3>
+    <div id="messages">
+      <div class="msg ia"><b>Coach IA:</b> Bienvenue ! Pose moi une question sur le match 🔥</div>
+    </div>
+    <div class="input-area">
+      <input id="input" placeholder="Analyse ce but...">
+      <button onclick="send()">Envoyer</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    function send(){
+      const val = document.getElementById('input').value;
+      if(val){socket.emit('chat message', val); document.getElementById('input').value='';}
+    }
+    socket.on('chat message', (data) => {
+      const cls = data.user === 'Coach IA' ? 'ia' : 'user';
+      document.getElementById('messages').innerHTML += `<div class="msg ${cls}"><b>${data.user}:</b> ${data.text}</div>`;
+      document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+    });
+  </script>
+</body>
+</html>
