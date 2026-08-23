@@ -1,9 +1,9 @@
 {
     "name": "footia-bot",
       "version": "1.0.0",
-        "main": "index.js",ex.js",
+        "main": "index.js",
           "scripts": {
-              "start": "node Index.js"
+              "start": "node index.js"
                 },
                   "dependencies": {
                       "express": "^4.18.2"
