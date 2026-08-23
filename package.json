@@ -1,0 +1,17 @@
+{
+  "name": "footia-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp Football Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.5.0",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
