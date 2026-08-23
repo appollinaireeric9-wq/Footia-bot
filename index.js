@@ -1,49 +1,57 @@
-const express = require('express');
-const axios = require('axios');
-const app = express();
-app.use(express.json());
+const exprimer = exiger('exprimer');
+const axios = exiger('axios');
+const application = exprimer();
+application.utiliser(exprimer.json())
 
-const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
-const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
-const FOOTBALL_API_KEY = process.env.FOOTBALL_API_KEY;
-const META_AI_KEY = process.env.META_AI_KEY;
+// 1. PAGE D'ACCUEIL POUR RENDER
+application.obtenir('/', (demande, res) => {
+  res.envoyer('Footia Bot is Running ✅');
+  });
 
-// Vérification Webhook Meta
-app.get('/webhook', (req, res) => {
-  const VERIFY_TOKEN = "footia2026";
-  if (req.query['hub.mode'] === 'subscribe' && req.query['hub.verify_token'] === VERIFY_TOKEN) {
-    return res.send(req.query['hub.challenge']);
-  }
-  res.sendStatus(403);
-});
+  const JETON_WHATSAPP = processus.environ.VARIABLE_JETON_WHATSAPP;
+  const NUMÉRO_DE_TÉLÉPHONE_ID = processus.environ.VARIABLE_NUMERO_ID;
+  const CLÉ_API_FOOTBALL = processus.environ.VARIABLE_CLE_FOOTBALL;
+  const META_AI_KEY = processus.environ.VARIABLE_META_AI;
 
-// Réception des messages
-app.post('/webhook', async (req, res) => {
-  const message = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
-  if (message) {
-    const from = message.from;
-    const text = message.text.body;
-    const reply = await getAIResponse(text);
-    await sendWhatsAppMessage(from, reply);
-  }
-  res.sendStatus(200);
-});
+  // 2. VÉRIFICATION DU WEBHOOK POUR META
+  application.obtenir('/webhook', (demande, res) => {
+    const VÉRIFIER_LE_JETON = "footia2026";
+      const mode = demande.requête['hub.mode'];
+        const jeton = demande.requête['hub.verify_token'];
+          const défi = demande.requête['hub.challenge'];
+            
+              si (mode && jeton === VÉRIFIER_LE_JETON) {
+                  retour res.envoyer(défi);
+                    } sinon {
+                        res.envoyerStatut(403);
+                          }
+                          });
 
-async function getAIResponse(userMessage) {
-  const prompt = `Tu es Footia, un assistant foot. Réponds en français, court et sympa. Question: ${userMessage}`;
-  const response = await axios.post('https://api.meta.ai/v1/chat', {
-    model: "llama-3.1",
-    messages: [{role: "user", content: prompt}]
-  }, { headers: { 'Authorization': `Bearer ${META_AI_KEY}` } });
-  return response.data.choices[0].message.content;
-}
+                          // 3. RÉCEPTION DES MESSAGES WHATSAPP
+                          application.poste('/webhook', asynchrone (demande, res) => {
+                            const corps = demande.corps;
+                              
+                                si (corps.objet === 'whatsapp_business_account') {
+                                    corps.entrée.forEach(entrée => {
+                                          const changements = entrée.changements;
+                                                changements.forEach(changement => {
+                                                        const message = changement.valeur.messages;
+                                                                si (message) {
+                                                                          const depuis = message[0].depuis;
+                                                                                    const texte = message[0].texte.corps;
+                                                                                              console.log(`Message de ${depuis}: ${texte}`);
+                                                                                                        
+                                                                                                                  // Ici tu ajouteras la réponse du bot plus tard
+                                                                                                                          }
+                                                                                                                                });
+                                                                                                                                    });
+                                                                                                                                        res.envoyerStatut(200);
+                                                                                                                                          } sinon {
+                                                                                                                                              res.envoyerStatut(404);
+                                                                                                                                                }
+                                                                                                                                                });
 
-async function sendWhatsAppMessage(to, text) {
-  await axios.post(`https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`, {
-    messaging_product: "whatsapp",
-    to: to,
-    text: { body: text }
-  }, { headers: { 'Authorization': `Bearer ${WHATSAPP_TOKEN}` } });
-}
-
-app.listen(3000, () => console.log('Bot Footia en ligne'));
+                                                                                                                                                const PORT = processus.environ.PORT || 3000;
+                                                                                                                                                application.écouter(PORT, () => {
+                                                                                                                                                  console.log(`Serveur en marche sur le port ${PORT}`);
+                                                                                                                                                  });
